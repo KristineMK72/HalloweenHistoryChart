@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Christian vs. Secular Halloween Practices Over Time</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; background: #f9f9fb; }
+    .chart-container { width: 100%; max-width: 900px; margin: 2rem auto; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #2c3e50; }
+  </style>
+</head>
+<body>
+
+<h2>Evolution of Halloween: Christian vs. Secular Practices</h2>
+
+<div class="chart-container">
+  <canvas id="halloweenChart"></canvas>
+</div>
+
+<script>
+// === DATA: Halloween Practices Over Time ===
+const halloweenData = {
+  labels: ['Pre-Christian (~500 BCE)', 'Early Christian (600–1000)', 'Medieval (1000–1500)', 'Early Modern (1500–1800)', '19th Century', '20th Century', '21st Century'],
+  datasets: [
+    {
+      label: 'Christian Practices',
+      data: [0, 3, 5, 4, 3, 3, 3], // Count of distinct practices
+      backgroundColor: 'rgba(46, 125, 50, 0.7)', // Green
+      borderColor: '#2e7d32',
+      borderWidth: 2
+    },
+    {
+      label: 'Secular Practices',
+      data: [4, 2, 4, 5, 6, 8, 10], // Count of distinct practices
+      backgroundColor: 'rgba(255, 87, 34, 0.7)', // Orange
+      borderColor: '#e64a19',
+      borderWidth: 2
+    }
+  ]
+};
+
+// === TOOLTIP MAPPING ===
+const tooltipDetails = {
+  'Pre-Christian (~500 BCE)': {
+    Christian: [],
+    Secular: ['Bonfires', 'Divination', 'Food offerings', 'Costume disguises']
+  },
+  'Early Christian (600–1000)': {
+    Christian: ['All Saints’ Day Mass', 'All Souls’ Day prayers', 'Church vigils'],
+    Secular: ['Bonfires', 'Divination']
+  },
+  'Medieval (1000–1500)': {
+    Christian: ['Souling', 'All Saints’ Mass', 'All Souls’ prayers', 'Church bells', 'Mumming as saints'],
+    Secular: ['Guising', 'Bonfires', 'Divination', 'Turnip lanterns']
+  },
+  'Early Modern (1500–1800)': {
+    Christian: ['All Saints’ Mass', 'All Souls’ prayers', 'Souling', 'Cemetery vigils'],
+    Secular: ['Guising', 'Mischief/pranks', 'Divination games', 'Turnip lanterns', 'Apple bobbing']
+  },
+  '19th Century': {
+    Christian: ['All Saints’ Mass', 'All Souls’ prayers', 'Cemetery visits'],
+    Secular: ['Guising', 'Pranks', 'Apple bobbing', 'Ghost storytelling', 'Harvest festivals', 'Early trick-or-treating']
+  },
+  '20th Century': {
+    Christian: ['All Saints’ Mass', 'All Souls’ prayers', 'Harvest festivals (church)'],
+    Secular: ['Trick-or-treating', 'Costume parties', 'Haunted houses', 'Horror films', 'Pumpkin carving', 'Candy distribution', 'Pranks', 'Decorations']
+  },
+  '21st Century': {
+    Christian: ['All Saints’ Mass', 'All Souls’ prayers', 'Trunk-or-treat (church)'],
+    Secular: ['Trick-or-treating', 'Costume parties', 'Haunted attractions', 'Horror media', 'Pumpkin carving', 'Candy culture', 'Social media aesthetics', 'Global cosplay', 'Decorations', 'Themed events']
+  }
+};
+
+// === CHART: Stacked Bar ===
+new Chart(document.getElementById('halloweenChart'), {
+  type: 'bar',
+  data: halloweenData,
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Halloween Practices: Christian vs. Secular (500 BCE–2025)', font: { size: 16 } },
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => {
+            const period = ctx.chart.data.labels[ctx.dataIndex];
+            const type = ctx.dataset.label === 'Christian Practices' ? 'Christian' : 'Secular';
+            const practices = tooltipDetails[period][type];
+            return `${ctx.dataset.label}: ${practices.length ? practices.join(', ') : 'None'}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { stacked: true, title: { display: true, text: 'Historical Period' } },
+      y: { stacked: true, title: { display: true, text: 'Number of Distinct Practices' } }
+    }
+  }
+});
+</script>
+
+<!-- Optional: Auto-export PNG -->
+<script>
+  window.onload = () => {
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = Chart.getChart('halloweenChart').toBase64Image();
+      link.download = 'halloween-practices.png';
+      link.click();
+    }, 1000);
+  };
+</script>
+
+</body>
+</html>
